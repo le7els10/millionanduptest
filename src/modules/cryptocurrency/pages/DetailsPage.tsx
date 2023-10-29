@@ -1,52 +1,41 @@
 /* 
   React 
 */
-import React, { useEffect, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../helpers/UseDispatch'
 import { NavLink, useParams } from 'react-router-dom';
 
 /* 
   Actions 
 */
-import { getCoinDetails, setLoading } from '../../../redux/CryptoActions';
+import { getCoinDetails } from '../../../redux/CryptoActions';
 
 /* 
   Interfaces 
 */
 import { CoinsDetailsInterface } from '../interfaces/ListInterface';
 import availablePages from '../../../router/AvailablePages';
+import Loader from '../components/Loader';
 
-enum detailsTypes {
-    Currency = "currency",
-    Exchange = "exchange"
-}
 
-const currencyCard = (data: CoinsDetailsInterface | undefined) => {
-    return (
-        <div>
-            <ul className="collection black-text">
-                <li className="collection-item">Rank  <span className="badge">{data?.rank}</span></li>
-                <li className="collection-item">Name  <span className="badge">{data?.name}</span></li>
-                <li className="collection-item">Price BTC  <span className="badge">$ {data?.price_btc}</span></li>
-                <li className="collection-item">Price USD  <span className="badge">$ {data?.price_usd}</span></li>
-                <li className="collection-item">Symbol  <span className="badge">{data?.symbol}</span></li>
-                <li className="collection-item">Percent change 1h  <span className="badge">{data?.percent_change_1h}</span></li>
-                <li className="collection-item">Percent change 24h  <span className="badge">{data?.percent_change_24h}</span></li>
-                <li className="collection-item">Percent change 7dh  <span className="badge">{data?.percent_change_7d}</span></li>
-            </ul>
-        </div>
-    )
-}
-
+/**
+ * @method DetailsPage
+ * @description Pagina para renderizar detalles de currencys
+ * 
+ * 
+ * @return {ReactElement}
+ */
 const DetailsPage = () => {
     const dispatch = useAppDispatch()
-    const { coinDetails } = useAppSelector((store) => store.crypto);
+    const { coinDetails, isLoading } = useAppSelector((store) => store.crypto);
     const [currentDetails, setcurrentDetails] = useState<CoinsDetailsInterface>()
 
-    const { type, id } = useParams()
+    const { id } = useParams()
 
     useEffect(() => {
-        dispatch(getCoinDetails(id!))
+        if (isLoading) {
+            dispatch(getCoinDetails(id!))
+        }
     }, [])
 
     useEffect(() => {
@@ -63,11 +52,28 @@ const DetailsPage = () => {
                 <div className="card-content white-text">
                     <span className="card-title">Details</span>
                     {
-                        type === detailsTypes.Currency && currencyCard(currentDetails)
+                        isLoading ?
+                            (
+                                <Loader />
+                            ) :
+                            (
+                                <div>
+                                    <ul className="collection black-text">
+                                        <li className="collection-item">Rank<span className="badge">{currentDetails?.rank}</span></li>
+                                        <li className="collection-item">Name  <span className="badge">{currentDetails?.name}</span></li>
+                                        <li className="collection-item">Price BTC  <span className="badge">$ {currentDetails?.price_btc}</span></li>
+                                        <li className="collection-item">Price USD  <span className="badge">$ {currentDetails?.price_usd}</span></li>
+                                        <li className="collection-item">Symbol  <span className="badge">{currentDetails?.symbol}</span></li>
+                                        <li className="collection-item">Percent change 1h  <span className="badge">{currentDetails?.percent_change_1h}</span></li>
+                                        <li className="collection-item">Percent change 24h  <span className="badge">{currentDetails?.percent_change_24h}</span></li>
+                                        <li className="collection-item">Percent change 7dh  <span className="badge">{currentDetails?.percent_change_7d}</span></li>
+                                    </ul>
+                                </div >
+                            )
                     }
-                </div>
-            </div>
-        </div>
+                </div >
+            </div >
+        </div >
     )
 }
 

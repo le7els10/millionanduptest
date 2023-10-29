@@ -25,6 +25,7 @@ Components
 */
 import List from '../components/List';
 import availablePages from '../../../router/AvailablePages';
+import Loader from '../components/Loader';
 
 /**
  * @method buildTable
@@ -37,32 +38,57 @@ const buildTable = (list: ExchangeResponse[]) => {
   return list.map(({ name, price_usd, base }, i) => ({ id: i.toString(), name, symbol: base, price_usd: price_usd.toString(), showExchanges: false }))
 }
 
+/**
+ * @method ExchangePage
+ * @description Pagina para renderizar exchanges de una currency
+ * 
+ * 
+ * @return {ReactElement}
+ */
 const ExchangePage = () => {
   const dispatch = useAppDispatch()
-  const { exchanges } = useAppSelector((store) => store.crypto);
+  const { exchanges, isLoading } = useAppSelector((store) => store.crypto);
+  const [Loading, setLoading] = useState(isLoading)
   const [ListExchanges, setListExchanges] = useState<ListToShow[]>([])
   const { id } = useParams()
 
-  useEffect(() => {
-    console.log('here');
 
-    dispatch(getExchanges(id!))
+  useEffect(() => {
+    if (isLoading) {
+      dispatch(getExchanges(id!))
+    }
   }, [])
+
+  useEffect(() => {
+    setLoading(isLoading)
+  }, [isLoading])
 
   useEffect(() => {
     setListExchanges(buildTable(exchanges))
   }, [exchanges])
 
 
-  return (<div className='container'>
-    <NavLink to={availablePages.HOME} className="waves-effect waves-light btn">
-      <i className="material-icons left">arrow_back</i>
-      Regresar
-    </NavLink>
 
-    <h5>Exchanges in USD</h5>
-    <List list={ListExchanges} type="exchanges" />
-  </div>
+  return (
+    <div className='container'>
+      <div className='row valign-wrapper'>
+        <div className="col s2">
+          <NavLink to={availablePages.HOME} className="waves-effect waves-light btn">
+            <i className="material-icons left">arrow_back</i>
+            Regresar
+          </NavLink>
+        </div>
+        <div className="col s10">
+          <h5>Exchanges in USD</h5>
+        </div>
+
+      </div>
+
+      {
+        Loading ? <Loader /> : <List list={ListExchanges} type="exchanges" />
+      }
+
+    </div>
   )
 }
 

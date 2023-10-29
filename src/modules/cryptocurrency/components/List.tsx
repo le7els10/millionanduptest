@@ -2,13 +2,19 @@
   Interfaces 
 */
 import availablePages from '../../../router/AvailablePages';
+import { ListToShow } from '../interfaces/ListInterface';
 
 /* 
   React 
 */
-import { ListToShow } from '../interfaces/ListInterface';
-import { NavLink } from "react-router-dom";
-import React from 'react'
+import React, { ReactHTMLElement } from 'react'
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from '../../../helpers/UseDispatch';
+
+/* 
+  Actions 
+*/
+import { setLoading } from '../../../redux/CryptoActions';
 
 
 interface Props {
@@ -16,9 +22,22 @@ interface Props {
     type: 'exchanges' | 'currency'
 }
 
+/**
+     * @method List
+     * @description Implementación componente de listado de datos.
+     * @return {ReactHTMLElement}
+     */
 const List = (props: Props) => {
     const { list, type } = props
+    const navigate = useNavigate()
+    const dispatch = useAppDispatch()
 
+
+    const goToRoute = (uri: string) => {
+        dispatch(setLoading(true))
+
+        navigate(uri)
+    }
 
     if (list.length > 0) {
         return (
@@ -52,8 +71,8 @@ const List = (props: Props) => {
                                         <td>{symbol}</td>
                                         <td>$ {price_usd}</td>
                                         <td >
-                                            <NavLink style={exchangesButtonStyle} to={`${availablePages.EXCHANGES}/${id}`} className="waves-effect waves-light btn" >Exchanges</NavLink>
-                                            <NavLink style={currencyButtonStyle} to={`${availablePages.DETAILS}/${showExchanges ? "currency" : "exchange"}/${id}`} className="waves-effect waves-light btn" >Details</NavLink>
+                                            <button style={exchangesButtonStyle} onClick={() => goToRoute(`${availablePages.EXCHANGES}/${id}`)} className="waves-effect waves-light btn" >Exchanges</button>
+                                            <button style={currencyButtonStyle} onClick={() => goToRoute(`${availablePages.DETAILS}/${id}`)} className="waves-effect waves-light btn" >Details</button>
                                         </td>
                                     </tr>
                                 )

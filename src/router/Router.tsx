@@ -20,7 +20,7 @@ function RouterComponent() {
     <Router>
       <Routes>
         <Route path={availablePages.HOME} element={<IndexPage />} />
-        <Route path={`${availablePages.DETAILS}/:type/:id`} element={<DetailsPage />} />
+        <Route path={`${availablePages.DETAILS}/:id`} element={<DetailsPage />} />
         <Route path={`${availablePages.EXCHANGES}/:id`} element={<ExchangePage />} />
       </Routes>
     </Router>
