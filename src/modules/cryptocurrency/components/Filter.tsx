@@ -10,14 +10,13 @@ const Filter = () => {
         (store: StoreInterface) => store.crypto
     );
     const dispatch = useAppDispatch()
-    const [Search, setSearch] = useState("")
+    const [Search, setSearch] = useState(crypto.search)
     const debouncedValue = useDebouncedValue(Search)
-    useEffect(() => {
-        setSearch(crypto.search)
-    }, [])
 
     useEffect(() => {
-        dispatch(triggerFilter(debouncedValue, crypto.list))
+        if (crypto.search !== debouncedValue) {
+            dispatch(triggerFilter(debouncedValue, crypto.list))
+        }
     }, [debouncedValue])
 
 
