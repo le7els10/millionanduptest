@@ -19,49 +19,58 @@ interface Props {
 const List = (props: Props) => {
     const { list, type } = props
 
-    return (
-        <div>
-            <table className='highlight responsive-table'>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Symbol</th>
-                        <th>Price USD</th>
-                        {type === "currency" && (<th>Actions</th>)}
-                    </tr>
-                </thead>
 
-                <tbody>
-                    {
-                        list.map(({ id, name, symbol, price_usd, showExchanges }, i) => {
+    if (list.length > 0) {
+        return (
+            <div>
+                <table className='highlight responsive-table'>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Symbol</th>
+                            <th>Price USD</th>
+                            {type === "currency" && (<th>Actions</th>)}
+                        </tr>
+                    </thead>
 
-                            const exchangesButtonStyle = {
-                                display: type === "currency" ? "inline-block" : "none",
-                                margin: "0 10px"
-                            }
+                    <tbody>
+                        {
+                            list.map(({ id, name, symbol, price_usd, showExchanges }, i) => {
 
-                            const currencyButtonStyle = {
-                                display: type === "currency" ? "inline-block" : "none"
-                            }
+                                const exchangesButtonStyle = {
+                                    display: type === "currency" ? "inline-block" : "none",
+                                    margin: "0 10px"
+                                }
 
-                            return (
-                                <tr key={i}>
-                                    <td>{name}</td>
-                                    <td>{symbol}</td>
-                                    <td>$ {price_usd}</td>
-                                    <td >
-                                        <NavLink style={exchangesButtonStyle} to={`${availablePages.EXCHANGES}/${id}`} className="waves-effect waves-light btn" >Exchanges</NavLink>
-                                        <NavLink style={currencyButtonStyle} to={`${availablePages.DETAILS}/${showExchanges ? "currency" : "exchange"}/${id}`} className="waves-effect waves-light btn" >Details</NavLink>
-                                    </td>
-                                </tr>
-                            )
-                        })
-                    }
+                                const currencyButtonStyle = {
+                                    display: type === "currency" ? "inline-block" : "none"
+                                }
 
-                </tbody>
-            </table>
-        </div>
-    )
+                                return (
+                                    <tr key={i}>
+                                        <td>{name}</td>
+                                        <td>{symbol}</td>
+                                        <td>$ {price_usd}</td>
+                                        <td >
+                                            <NavLink style={exchangesButtonStyle} to={`${availablePages.EXCHANGES}/${id}`} className="waves-effect waves-light btn" >Exchanges</NavLink>
+                                            <NavLink style={currencyButtonStyle} to={`${availablePages.DETAILS}/${showExchanges ? "currency" : "exchange"}/${id}`} className="waves-effect waves-light btn" >Details</NavLink>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        )
+    } else {
+        return (
+            <div className='center-align'>
+                No existen valores relacionados
+            </div>
+        )
+    }
 }
 
 export default List

@@ -1,5 +1,5 @@
 const cryptoRoutes = {
-  LIST_ROUTE: "tickers/?start=0&limit=10",
+  LIST_ROUTE: "tickers/",
   COIN_DETAILS_ROUTE: "ticker/",
   EXCHANGE_ROUTE: "coin/markets",
 };

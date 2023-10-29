@@ -1,6 +1,7 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Puedes encontrar el repositorio de este proyecto en:
+https://github.com/le7els10/millionanduptest
 
 ## Available Scripts
 

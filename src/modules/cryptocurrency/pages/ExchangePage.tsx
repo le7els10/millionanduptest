@@ -60,7 +60,7 @@ const ExchangePage = () => {
       Regresar
     </NavLink>
 
-    <h5>Exchanges</h5>
+    <h5>Exchanges in USD</h5>
     <List list={ListExchanges} type="exchanges" />
   </div>
   )

@@ -8,7 +8,7 @@ import { NavLink, useParams } from 'react-router-dom';
 /* 
   Actions 
 */
-import { getCoinDetails } from '../../../redux/CryptoActions';
+import { getCoinDetails, setLoading } from '../../../redux/CryptoActions';
 
 /* 
   Interfaces 
@@ -46,22 +46,12 @@ const DetailsPage = () => {
     const { type, id } = useParams()
 
     useEffect(() => {
-        switch (type) {
-            case detailsTypes.Currency:
-                dispatch(getCoinDetails(id!))
-                break;
-
-            default:
-                break;
-        }
-
+        dispatch(getCoinDetails(id!))
     }, [])
 
     useEffect(() => {
         setcurrentDetails(coinDetails)
     }, [coinDetails])
-
-
 
     return (
         <div className='container'>

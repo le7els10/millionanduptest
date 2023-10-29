@@ -1,20 +1,23 @@
 import { Dispatch } from "redux";
 import cryptoCurrencyApi from "../api/CryptoCurrencyApi";
 import cryptoRoutes from "../api/CryptoRoutes";
+import { ListResponse } from '../modules/cryptocurrency/interfaces/ListInterface';
 
 const initialData = {
     list: [],
     exchanges: [],
     coinDetails: null,
-    exchangeDetails: null,
-    isLoading: true
+    isLoading: false,
+    search: "",
+    listFiltered: []
 };
 
 //TYPES
 const GET_LIST_SUCCESS = "GET_LIST_SUCCESS";
+const SET_LIST_FILTERED_SUCCESS = "SET_LIST_FILTERED_SUCCESS";
 const GET_EXCHANGE_SUCCESS = "GET_EXCHANGE_SUCCESS";
 const GET_COIN_DETAILS_SUCCESS = "GET_COIN_DETAILS_SUCCESS";
-const GET_EXCHANGE_DETAILS_SUCCESS = "GET_EXCHANGE_DETAILS_SUCCESS";
+const GET_LOADING_SUCCESS = "GET_LOADING_SUCCESS";
 
 //REDUCER
 export default function cryptoReducer(state = initialData, action: any) {
@@ -23,6 +26,7 @@ export default function cryptoReducer(state = initialData, action: any) {
             return {
                 ...state,
                 list: action.payload,
+                listFiltered: action.payload
             };
 
         case GET_EXCHANGE_SUCCESS:
@@ -37,10 +41,17 @@ export default function cryptoReducer(state = initialData, action: any) {
                 coinDetails: action.payload,
             };
 
-        case GET_EXCHANGE_DETAILS_SUCCESS:
+        case GET_LOADING_SUCCESS:
             return {
                 ...state,
-                exchangeDetails: action.payload,
+                isLoading: action.payload,
+            };
+
+        case SET_LIST_FILTERED_SUCCESS:
+            return {
+                ...state,
+                listFiltered: action.payload.list,
+                search: action.payload.search
             };
 
 
@@ -60,10 +71,17 @@ export const getList = () => async (dispatch: Dispatch) => {
     try {
 
         const req = await cryptoCurrencyApi.get(cryptoRoutes.LIST_ROUTE)
+        let toReturn = req.data
+
+        if (toReturn.data) {
+            toReturn = toReturn.data
+        } else {
+            toReturn = []
+        }
 
         dispatch({
             type: GET_LIST_SUCCESS,
-            payload: req.data.data,
+            payload: toReturn,
         });
     } catch (error) {
         console.log("Error al obtener lista de coins");
@@ -98,7 +116,6 @@ export const getExchanges = (coin: string) => async (dispatch: Dispatch) => {
  */
 export const getCoinDetails = (coin: string) => async (dispatch: Dispatch) => {
     try {
-
         const req = await cryptoCurrencyApi.get(`${cryptoRoutes.COIN_DETAILS_ROUTE}/?id=${coin}`)
 
         dispatch({
@@ -109,5 +126,43 @@ export const getCoinDetails = (coin: string) => async (dispatch: Dispatch) => {
         console.log("Error al obtener detalles de coin");
     }
 };
+
+/**
+ * @method triggerFilter
+ * @description Setear string a buscar entre currencys
+ * @param {string} search search 
+ * @return {void}
+ */
+export const triggerFilter = (search: string, originalList: ListResponse[]) => (dispatch: Dispatch) => {
+
+    let newList = originalList.filter((coin) => {
+        let lowerName = coin.name.toLowerCase(),
+            lowerSearch = search.toLowerCase()
+
+        if (lowerName.includes(lowerSearch)) {
+            return coin
+        }
+    })
+
+    dispatch({
+        type: SET_LIST_FILTERED_SUCCESS,
+        payload: { search, list: newList },
+    });
+};
+
+/**
+ * @method setLoading
+ * @description Setear bandera de loading
+ * @param {boolean} isLoading isLoading 
+ * @return {void}
+ */
+export const setLoading = (isLoading: boolean) => (dispatch: Dispatch) => {
+    dispatch({
+        type: GET_LOADING_SUCCESS,
+        payload: isLoading,
+    });
+
+};
+
 
 

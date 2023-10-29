@@ -14,6 +14,7 @@ import { StoreInterface } from "../../../redux/interfaces/StoreInterface";
 */
 import { useEffect, useState } from "react"
 import { useSelector } from 'react-redux';
+import Filter from "../components/Filter";
 
 
 /**
@@ -35,14 +36,15 @@ const IndexPage = () => {
   const [ListCoins, setList] = useState<ListToShow[]>([])
 
   useEffect(() => {
-    setList(buildTable(crypto.list))
-  }, [crypto.list])
+    setList(buildTable(crypto.listFiltered))
+  }, [crypto.listFiltered])
 
   return (
     <div className='container'>
-      <h4>Cryptocurrency test</h4>
+      <h4 >Cryptocurrency test</h4>
 
       <h5>Coins list </h5>
+      <Filter />
       <List list={ListCoins} type="currency" />
     </div>
   )
