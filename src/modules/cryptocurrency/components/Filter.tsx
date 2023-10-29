@@ -3,30 +3,27 @@ import { useAppDispatch } from '../../../helpers/UseDispatch'
 import { triggerFilter } from '../../../redux/CryptoActions'
 import { useSelector } from 'react-redux';
 import { StoreInterface } from '../../../redux/interfaces/StoreInterface';
+import { useDebouncedValue } from '../hooks/useDebounceValue';
 
 const Filter = () => {
-    let timer: NodeJS.Timer
-
     const crypto = useSelector(
         (store: StoreInterface) => store.crypto
     );
     const dispatch = useAppDispatch()
     const [Search, setSearch] = useState("")
-
+    const debouncedValue = useDebouncedValue(Search)
     useEffect(() => {
         setSearch(crypto.search)
     }, [])
+
+    useEffect(() => {
+        dispatch(triggerFilter(debouncedValue, crypto.list))
+    }, [debouncedValue])
 
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         let val = e.target.value
         setSearch(val)
-
-        clearTimeout(timer)
-
-        timer = setTimeout(() => {
-            dispatch(triggerFilter(val, crypto.list))
-        }, 800);
     }
 
     return (
