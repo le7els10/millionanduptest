@@ -2,6 +2,8 @@
 Components 
 */
 import List from "../components/List"
+import Filter from "../components/Filter";
+import Loader from "../components/Loader";
 
 /* 
 Interfaces 
@@ -14,8 +16,6 @@ import { StoreInterface } from "../../../redux/interfaces/StoreInterface";
 */
 import React, { ReactElement, useEffect, useState } from "react"
 import { useSelector } from 'react-redux';
-import Filter from "../components/Filter";
-import Loader from "../components/Loader";
 
 
 /**

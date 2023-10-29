@@ -14,6 +14,10 @@ import { getCoinDetails } from '../../../redux/CryptoActions';
   Interfaces 
 */
 import { CoinsDetailsInterface } from '../interfaces/ListInterface';
+
+/* 
+Components 
+*/
 import availablePages from '../../../router/AvailablePages';
 import Loader from '../components/Loader';
 

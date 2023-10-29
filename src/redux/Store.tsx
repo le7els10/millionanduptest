@@ -14,6 +14,12 @@ declare global {
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+
+/**
+ * @method generateStore
+ * @description generar store de estados globales
+ * 
+ */
 export default function generateStore() {
     const store = createStore(
         rootReducer,
