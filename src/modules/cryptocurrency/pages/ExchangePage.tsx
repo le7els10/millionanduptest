@@ -72,13 +72,13 @@ const ExchangePage = () => {
   return (
     <div className='container'>
       <div className='row valign-wrapper'>
-        <div className="col s2">
+        <div className="col s3">
           <NavLink to={availablePages.HOME} className="waves-effect waves-light btn">
             <i className="material-icons left">arrow_back</i>
             Regresar
           </NavLink>
         </div>
-        <div className="col s10">
+        <div className="col s9">
           <h5>Exchanges in USD</h5>
         </div>
 

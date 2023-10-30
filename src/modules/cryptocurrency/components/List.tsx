@@ -7,7 +7,7 @@ import { ListToShow } from '../interfaces/ListInterface';
 /* 
   React 
 */
-import React, { ReactHTMLElement } from 'react'
+import React from 'react'
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from '../../../helpers/UseDispatch';
 
